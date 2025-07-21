@@ -81,7 +81,7 @@ normalizarDatos()
 
 
 
-//Menú Principal.
+//Menú Principal
 function menuPrincipal() {
     let opcionPrincipal = 0;
     do { 
