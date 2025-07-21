@@ -78,6 +78,60 @@ normalizarDatos()
 
 //Se ordena el sistema de bibliotecas a partir de un menú principal y varios submenús.
 
+//Menú Libro: Opciones Avanzadas
+function menuLibroAvanzado() {
+    let opcionLibroAvanzado = 0;
+    do {
+        console.log('\nMENÚ LIBRO AVANZADO\n1. Filtrar por palabras en título\n2. Ver estadísticas\n0. Volver');
+        opcionLibroAvanzado = parseInt(prompt('Ingrese el número de la opción escogida: '));
+
+        switch (opcionLibroAvanzado) {
+            
+    //Función para buscar títulos compuestos con varias palabras.        
+            case 1:
+                function librosConPalabrasEnTitulo(libros) {
+                    const letrasValidas = 'abcdefghijklmnopqrstuvwxyz '; 
+
+                    let librosFiltrados = libros.filter(libro => {
+                        let tituloLimpio = libro.titulo.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+                        for (let i = 0; i < tituloLimpio.length; i++) {
+                            let letra = tituloLimpio[i];
+                            if (!letrasValidas.includes(letra)) {
+                                return false;
+                            }
+                        }
+
+                        let palabras = tituloLimpio.split(' ');
+                        let cantidadPalabras = 0;
+                        for (let i = 0; i < palabras.length; i++) {
+                            if (palabras[i] !== '') {
+                                cantidadPalabras++;
+                            }
+                        }
+
+                        return cantidadPalabras > 1;
+                    });
+
+                    console.log('Libros con más de una palabra en el título (solo letras):'); 
+                    librosFiltrados.forEach(libro => console.log(libro.titulo)); 
+
+                    return librosFiltrados; 
+                };
+                librosConPalabrasEnTitulo(libros);
+                break;
+            
+                case 2:
+                calcularEstadisticas ();
+                break;
+            case 0:
+                break;
+            default:
+                console.log('Ingrese una opción válida.');
+        }
+    } while (opcionLibroAvanzado !== 0);
+};
+
 
 
 
