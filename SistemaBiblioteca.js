@@ -536,34 +536,184 @@ function menuPrestamos() {
         opcionPrestamo = parseInt(prompt('Ingrese el número de la opción escogida: '));
 
         switch (opcionPrestamo) {
+    //Función para prestar un libro a un usuario determinado.
             case 1:
                 idLibro = parseInt(prompt('Ingrese el id. del libro: '));
                 let confirmacionBuscarLibro = true;
                 let confirmacionPrestamoUsuario = false;
                 let confirmacionBuscarUsuario = false;
+                function prestarLibro(idLibro, idUsuario) {
+                    for (let i = 0; i < libros.length; i++) {
+                        do{        
+                            if (idLibro === libros[i].id && libros[i].disponibilidad === true) {
+                                console.log('Id.: ' + libros[i].id + '.\nTítulo: ' + libros[i].titulo + '.\nAutor@: ' + libros[i].autor + '.\nAño: ' + libros[i].anio + '.\nDisponibilidad: ' + (libros[i].disponibilidad ? 'Disponible.' : 'No disponible.'));
+                                confirmacionBuscarLibro = normalizarDatosUsuario(prompt('¿Confirma el prestámo del libro? Si/No: '));
+                            
+                                if (confirmacionBuscarLibro === 'si') { 
+                                    confirmacionBuscarLibro = true;
+                                    idUsuario =  parseInt(prompt('Ingrese su id. de soci@: '));         
+                                    
+                                    for (let i = 0; i < usuarios.length; i++){
+                                        
+                                        do {
+                                            
+                                            if (idUsuario === usuarios[i].id) {
+                                                console.log('Id.: ' + usuarios[i].id + '.\nUsuari@: ' + usuarios[i].nombre + '.\nEmail: ' + usuarios[i].email );
+                                                mostrarLibrosDeUsuario(idUsuario)
+                                                
+                                                do{
+                                                    let confirmacionUsuario = normalizarDatosUsuario(prompt('¿El id. es correcto? Si/No: '));
+                                                    
+                                                    if (confirmacionUsuario === 'si') {
+                                                        confirmacionPrestamoUsuario = true;
+                                                        usuarios[i].librosPrestados.push(libros[i].id);
+                                                        libros[i].disponibilidad = false; 
+                                                        console.log('El prestámo se realizó existosamente.');
+                                                        idUsuario = usuarios[i];
+                                                        mostrarLibrosDeUsuario(idUsuario)
+                                                        }
+
+                                                } while (confirmacionPrestamoUsuario === false);
+                                            
+                                            } else {
+                                                idUsuario =  parseInt(prompt('El id. es inexistente. Ingrese nuevamente su id. de soci@: '));
+                                            }
+                                        
+                                        } while (confirmacionBuscarUsuario === false)
+                                    } 
+                                } 
+                            } else {
+                                idLibro=  parseInt(prompt('El id. es inexistente. Ingrese nuevamente el id. del libro: '));
+                            }
+                        } while (confirmacionBuscarLibro === false);
+                    } 
+                };
 
                 prestarLibro(idLibro, idUsuario);
                 break;
-           
+    
+    //Función para realizar la devolución de un libro por usuario       
             case 2:
                 idUsuario = parseInt(prompt('Ingrese su id. de soci@: '));
                 confirmacionBuscarLibro = true;
                 let confirmacionDevolucionUsuario = false;
 
+                function devolverLibro(idLibro, idUsuario) {
+                    let usuarioEncontrado = false;
+                    while (!usuarioEncontrado) {
+                        for (let i = 0; i < usuarios.length; j++) {
+                            
+                            if (idUsuario === usuarios[i].id) {
+                                console.log('Id.: ' + usuarios[i].id + '.\nUsuari@: ' + usuarios[i].nombre + '.\nEmail: ' + usuarios[i].email);
+                                mostrarLibrosDeUsuario(idUsuario)
+                                let confirmarUsuario = normalizarDatosUsuario(prompt('¿El id. es correcto? Si/No: '));
+                                
+                                if (confirmarUsuario === 'si') {
+                                    usuarioEncontrado = true;
+                                    let idLibro = parseInt(prompt('Ingrese el id. del libro: '));
+                                    
+                                    for (let i = 0; i < libros.length; i++) {
+                                        
+                                        if (idLibro === libros[i].id && libros[i].disponibilidad === false) {
+                                            console.log('Id.: ' + libros[i].id + '.\nTítulo: ' + libros[i].titulo + '.\nAutor@: ' + libros[i].autor + '.\nAño: ' + libros[i].anio + '.\nDisponibilidad: ' + (libros[i].disponibilidad ? 'Disponible.' : 'No disponible.'));
+                                            let confirmar = normalizarDatosUsuario(prompt('¿Confirma la devolución del libro? Si/No: '));
+                                            
+                                            if (confirmar === 'si') { 
+                                                let nuevoLibrosPrestados = usuarios[i].librosPrestados.slice(libros[i].id);
+                                                libros[i].disponibilidad = true;
+                                                console.log('La devolución se realizó existosamente.');
+                                                mostrarLibrosDeUsuario(idUsuario)
+                                                break;
+                                            }
+                                        } else {
+                                            console.log('Datos inválidos. Ingrese nuevamente.')
+                                        }
+                                    }
+                                }
+                            }
+                            if (!usuarioEncontrado) {
+                                        console.log('El id. es inexistente o no fue confirmado. Intente nuevamente.');
+                        } break;
+                    };
+                }
+                };
+
                 devolverLibro(idLibro, idUsuario);
                 break;
-            
+    
+    //Función para conocer estadísticas de los préstamos y devoluciones de libros.            
             case 3:
+                function generarReporteLibros () { 
+                    //Cantidad total de libros
+                    console.log('Cantidad total: ' + libros.length + ' libros.');
+
+                    //Cantidad de libros prestados
+                    totalLibrosPrestados = libros.reduce((contador, libros) => { 
+                        if (libros.disponibilidad === false) { 
+                            return contador + 1;
+                        } else {
+                            return contador;
+                        }
+                    }, 0); 
+
+                    console.log('Cantidad de libros prestados: ' + totalLibrosPrestados); 
+
+                    //Cantidad de libros por género.
+                    console.log('Libros por género.') 
+                    totalLibrosGenero = libros.map(libro => libro.genero); 
+                    librosPorGenero = totalLibrosGenero.reduce((contador, generoActual) => { 
+                        switch (generoActual) { 
+                            case 'Biografia':
+                            case 'Ensayo':
+                            case 'Desarrollo personal':
+                            case 'Psicologia':
+                            case 'Ficcion':
+                            case 'No ficcion':
+                                if (contador[generoActual]) {
+                                    contador[generoActual]++;
+                                } else {
+                                    contador[generoActual] = 1;
+                                }
+                            break;
+                        }
+
+                        return contador;
+                    }, {}); 
+
+                    for (let genero in librosPorGenero) { 
+                        console.log(genero + ': ' + librosPorGenero[genero]); 
+                    };
+
+                    //Libro más antiguo y más nuevo.
+                    libroMasAntiguo = libros.reduce((numero, libros) => {
+                        if (libros.anio < numero) {
+                        return numero = libros.anio;
+                        } else {
+                            return numero;
+                        }
+                    }, libros[0].anio);
+
+                    console.log('El libro más antiguo es del año: ' + libroMasAntiguo);
+
+                    libroMasNuevo = libros.reduce((numero, libros) => {
+                        if (libros.anio > numero) {
+                        return numero = libros.anio;
+                        } else {
+                            return numero;
+                        }
+                    }, libros[0].anio);
+
+                    console.log('El libro más nuevo es del año: ' + libroMasNuevo); //Muestro el resultado por consola
+                };
+
                 generarReporteLibros ();
-                break;
-            
-            case 0:
-                break;
+            break;
+                                      
             default:
-                console.log('Ingrese una opción válida.');
-        }
-    } while (opcionPrestamo !== 0);
-}
+            console.log('Ingrese una opción válida.');
+                        }
+                    } while (opcionPrestamo !== 0);
+                }
 
 
 
