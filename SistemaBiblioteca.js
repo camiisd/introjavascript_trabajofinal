@@ -29,6 +29,8 @@ const usuarios = [ //Nuevamente utilizo const porque es información que no voy 
             { id: 107, nombre: 'Camila Herrera', email: 'CAMILAH@GMAIL.COM', librosPrestados: [13, 15] }
 ];
 
+const prompt = require('prompt-sync')();
+
 //Función para mostrar los libros que cada usuario tiene en préstamo.
 function mostrarLibrosDeUsuario(idUsuario) {
     const usuario = usuarios.find(u => u.id === idUsuario);
@@ -87,7 +89,7 @@ function menuLibroAvanzado() {
 
         switch (opcionLibroAvanzado) {
             
-    //Función para buscar títulos compuestos con varias palabras.        
+    //Función para buscar títulos compuestos.        
             case 1:
                 function librosConPalabrasEnTitulo(libros) {
                     const letrasValidas = 'abcdefghijklmnopqrstuvwxyz '; 
@@ -120,8 +122,52 @@ function menuLibroAvanzado() {
                 };
                 librosConPalabrasEnTitulo(libros);
                 break;
-            
+
+    //Función para calcular estadisticas respecto a los libros almacenados con el objeto Math.         
                 case 2:
+                function calcularEstadisticas () {
+                    let aniosPublicacion = libros.map(libro => libro.anio);
+                    console.log('Si miramos sólo los años de publicación de nuestra colección, obtenemos las siguientes estadísticas.');
+
+                    //Promedio de años de publicación
+                    let suma = 0;
+                    for (let i = 0; i < aniosPublicacion.length; i++) {
+                        suma += libros[i].anio;
+                    };
+
+                    let promedio = Math.ceil(suma / aniosPublicacion.length);
+                    console.log('En promedio, nuestra colección es del año ' + promedio + '.');
+
+                    //Año de publicación más frecuente (moda)
+                    let moda = 0; 
+                    let masFrecuente = 0;
+                    let maxPublicaciones = 0;
+
+                    let anioFrecuente = aniosPublicacion.reduce((acumulador, anios) => {
+                        if (!acumulador[anios]) {
+                            acumulador[anios] = 0;
+                        };
+
+                        acumulador[anios]++; 
+
+                        if (acumulador[anios] > masFrecuente) {
+                            masFrecuente = acumulador[anios];
+                            moda = anios;
+                        }
+                        return acumulador; 
+                    }, {});
+
+                    maxPublicaciones = Math.max(...Object.values(anioFrecuente));
+
+                    console.log('El año con más publicaciones (cant. ' + maxPublicaciones + ') es ' + moda + '.');
+
+                    //La diferencia de años entre el libro más antiguo y más nuevo.
+                    let masNuevo = Math.max(...aniosPublicacion);
+                    let masAntiguo = Math.min(...aniosPublicacion);
+                    let diferencia = masNuevo - masAntiguo;
+
+                    console.log('La diferencia entre el libro más antiguo (' + masAntiguo + ') y el más nuevo (' + masNuevo + ') es de ' + diferencia + ' años.');
+                }
                 calcularEstadisticas ();
                 break;
             case 0:
