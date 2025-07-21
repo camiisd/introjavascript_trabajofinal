@@ -178,6 +178,7 @@ function menuLibroAvanzado() {
     } while (opcionLibroAvanzado !== 0);
 };
 
+//Menú Libro: Opciones Administrador
 function menuLibroAdministrador() {
     let opcionLibroAdministrador = 0;
     do {
@@ -245,6 +246,135 @@ function menuLibroAdministrador() {
         }
     } while (opcionLibroAdministrador !== 0);
 }
+
+//Menú Libro
+//Menú Libro
+function menuLibro() {
+    let opcionLibro = '';
+    do {
+        console.log('\nMENÚ LIBROS\na. Ver todos los libros\nb. Ordenar libros\nc. Buscar libro\nd. Opciones avanzadas\ne. Solo administrador\nx. Volver al menú principal');
+        opcionLibro = normalizarDatosUsuario(prompt('Ingrese la letra de la opción escogida: '));
+
+        switch (opcionLibro) {
+            case 'a':
+                for (let i = 0; i < libros.length; i++) {
+                    console.log('\nId. ' + libros[i].id +'\nTítulo: ' + libros[i].titulo + '\nAutor: ' + libros[i].autor + '\nAño: ' + libros[i].anio + '\nGénero: ' + libros[i].genero + (libros[i].disponibilidad ? '\nDisponible.' : '\nNo disponible.')); //Me permite ver todos los libros del array.
+                }    
+                break;
+    // Función para ordenar los Libros según año o título.       
+            case 'b': 
+                let criterioOrdenar = normalizarDatosUsuario(prompt ('¿Cómo desea ordenar los libros? Título/Año: '));
+                function ordenarLibros(criterioOrdenar) {
+                    switch (criterioOrdenar) {
+                        case 'año':
+                            for (let fila =0; fila < libros.length-1; fila++) {
+                                for (let columna = 0; columna < libros.length - 1- fila; columna++) {
+                                    if (libros[columna].anio > libros[columna+1].anio ) {
+                                        let temporal = libros [columna]; 
+                                        libros [columna ] = libros [columna+1]; 
+                                        libros [columna + 1 ] = temporal; 
+                                    }
+                                }
+                            }
+                            for (let i = 0; i < libros.length; i++) {
+                                console.log(libros[i].titulo + ' - ' + libros[i].anio);
+                                }
+                            break;
+                        
+                        case 'titulo':
+                            for (let fila =0; fila < libros.length-1; fila++) {
+                                for (let columna = 0; columna < libros.length - 1- fila; columna++) {
+                                    if (libros[columna].titulo > libros[columna+1].titulo ) {
+                                        let temporal = libros [columna];
+                                        libros [columna ] = libros [columna+1];
+                                        libros [columna + 1 ] = temporal; 
+                                    }
+                                }
+                            }
+
+                            for (let i = 0; i < libros.length; i++) {
+                                console.log(libros[i].titulo + ' - ' + libros[i].anio);
+                                }
+                            break;
+                        
+                        default:
+                            console.log('Datos inválidos.');
+                        break;
+
+                    }       
+                };
+
+                ordenarLibros(criterioOrdenar)
+                break;
+                
+    //Función para buscar libro según año, título o género
+            case 'c':
+                let criterioBuscar = normalizarDatosUsuario(prompt ('¿Qué desea buscar? Título/Autor/Género: '));
+                let valor = normalizarDatosUsuario(prompt ('Ingrese el '+ ((criterio === 'titulo') ? 'título: ' : (criterio === 'autor') ? 'autor: ' : 'género: '))); 
+                function buscarLibro (criterioBuscar, valor) {
+                    switch (criterioBuscar) {
+                        case 'titulo': 
+                            for (i=0; i < libros.length; i++) {
+                            if (libros[i].titulo === valor) {
+                                    console.log('Título: ' + libros[i].titulo + '\nAutor: ' + libros[i].autor + '\nAño: ' + libros[i].anio + '\nGénero: ' + libros[i].genero + (libros[i].disponibilidad ? '\nDisponible.' : '\nNo disponible.')); // A parti de console.log imprimo la información solicitada. /n me hace salto de líneas.
+                            }
+                            }
+                        break;
+                        
+                        case 'autor':
+                            for (i=0; i < libros.length; i++) {
+                            if (libros[i].autor === valor) {
+                                    console.log('Título: ' + libros[i].titulo + '\nAutor: ' + libros[i].autor + '\nAño: ' + libros[i].anio + '\nGénero: ' + libros[i].genero + (libros[i].disponibilidad ? '\nDisponible.' : '\nNo disponible.'));
+                            }
+                            }
+                        break;
+
+                        case 'genero':
+                            for (i=0; i < libros.length; i++) {
+                            if (libros[i].genero === valor) {
+                                    console.log('Título: ' + libros[i].titulo + '\nAutor: ' + libros[i].autor + '\nAño: ' + libros[i].anio + '\nGénero: ' + libros[i].genero + (libros[i].disponibilidad ? '\nDisponible.' : '\nNo disponible.'));
+                            };
+                            };
+                            
+                        break;
+
+                        case 'id':
+                            for (i=0; i < libros.length; i++) {
+                            if (libros[i].id === valor) {
+                                    console.log('Título: ' + libros[i].titulo + '\nAutor: ' + libros[i].autor + '\nAño: ' + libros[i].anio + '\nGénero: ' + libros[i].genero + (libros[i].disponibilidad ? '\nDisponible.' : '\nNo disponible.'));
+                                };
+                            };
+                            
+                        break;
+
+
+                        default:
+                            console.log('Datos inválidos.');
+                        break;
+                    }
+                };
+
+                buscarLibro (criterioBuscar, valor); 
+                break;
+
+            case 'd':
+                menuLibroAvanzado();
+                break;
+            
+            case 'e':
+                let esAdmin = normalizarDatosUsuario(prompt('¿Es administrador? Si/No: '));
+                esAdmin === 'si' ? menuLibroAdministrador() : console.log('Acceso denegado.');
+                break;
+
+            case 'x':
+                break;
+
+            default:
+                console.log('Ingrese una opción válida.');
+        }
+    } while (opcionLibro !== 'x');
+}
+
 
 
 
