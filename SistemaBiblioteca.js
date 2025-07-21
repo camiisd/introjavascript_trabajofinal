@@ -527,6 +527,45 @@ function menuUsuario() {
     } while (opcionUsuario !== 0);
 }
 
+//Menú Prestámos
+function menuPrestamos() {
+    let opcionPrestamo = 0;
+    do {
+        console.log('\nMENÚ PRÉSTAMOS\n1. Realizar préstamo\n2. Devolver libro\n3. Ver reporte\n0. Volver');
+
+        opcionPrestamo = parseInt(prompt('Ingrese el número de la opción escogida: '));
+
+        switch (opcionPrestamo) {
+            case 1:
+                idLibro = parseInt(prompt('Ingrese el id. del libro: '));
+                let confirmacionBuscarLibro = true;
+                let confirmacionPrestamoUsuario = false;
+                let confirmacionBuscarUsuario = false;
+
+                prestarLibro(idLibro, idUsuario);
+                break;
+           
+            case 2:
+                idUsuario = parseInt(prompt('Ingrese su id. de soci@: '));
+                confirmacionBuscarLibro = true;
+                let confirmacionDevolucionUsuario = false;
+
+                devolverLibro(idLibro, idUsuario);
+                break;
+            
+            case 3:
+                generarReporteLibros ();
+                break;
+            
+            case 0:
+                break;
+            default:
+                console.log('Ingrese una opción válida.');
+        }
+    } while (opcionPrestamo !== 0);
+}
+
+
 
 //Menú Principal
 function menuPrincipal() {
