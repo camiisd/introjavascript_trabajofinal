@@ -28,3 +28,29 @@ const usuarios = [ //Nuevamente utilizo const porque es información que no voy 
             { id: 106, nombre: 'Thiago Medina', email: 'thiago.medina@gmail.com', librosPrestados: [11] },
             { id: 107, nombre: 'Camila Herrera', email: 'CAMILAH@GMAIL.COM', librosPrestados: [13, 15] }
 ];
+
+//Función para mostrar los libros que cada usuario tiene en préstamo.
+function mostrarLibrosDeUsuario(idUsuario) {
+    const usuario = usuarios.find(u => u.id === idUsuario);
+
+    if (!usuario) {
+        console.log('Usuario no encontrado.');
+        return;
+    }
+
+    console.log('\nLibros prestados');
+
+    if (usuario.librosPrestados.length === 0) {
+        console.log('Sin libros prestados.');
+    } else {
+        usuario.librosPrestados.forEach(idLibro => {
+            const libro = libros.find(libro => libro.id === idLibro);
+            if (libro) {
+                console.log(`- ${libro.titulo} (Autor@: ${libro.autor})`);
+            } else {
+                console.log(`- Libro con id. ${idLibro} no encontrado.`);
+            }
+        });
+    }
+};
+let idUsuario = '';
