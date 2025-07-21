@@ -190,20 +190,50 @@ function menuLibroAdministrador() {
             case 1:
                 let nuevoLibro = [];
                 function agregarLibro (nuevoLibro){
-                    let nuevoLibro = { //Primero creo un objeto con todas las propiedades para que sea más fácil guardar la información en el array 'libros'
-                            id: libros.length + 1, //el id lo asigna directamente el sistema para seguir la numeración del array.
-                            titulo: normalizarDatosUsuario(prompt ('Ingrese el título: '), true), //La última función me permite que todo se quede en minúsculas.
+                    let nuevoLibro = {
+                            id: libros.length + 1, 
+                            titulo: normalizarDatosUsuario(prompt ('Ingrese el título: '), true), 
                             autor: normalizarDatosUsuario(prompt ('Ingrese el autor: '), false),
-                            anio: parseInt(prompt('Ingrese el año: ')), //Me aseguro que el año sea un número entero.
+                            anio: parseInt(prompt('Ingrese el año: ')), 
                             genero: normalizarDatosUsuario(prompt('Ingrese el género: '), false)
                         };
                     libros.push (nuevoLibro);
                 };
                 agregarLibro(nuevoLibro);
                 break;
-                
+    
+    //Función para el administrador: Borrar un libro.            
             case 2:
-                let idBorrar = parseInt(prompt ('¿Qué título desea borrar? Ingrese el id.: ')); //El usuario ingresa el número del id. Me aseguro que sea un número entero.
+                let idBorrar = parseInt(prompt ('¿Qué título desea borrar? Ingrese el id.: ')); 
+                function borrarLibro(idBorrar) {
+                    let confirmacion = false;
+                    do {
+                        let indice = libros.findIndex(libro => libro.id === idBorrar);
+
+                        if (indice !== -1) {
+                            let libro = libros[indice];
+                            console.log('Id: ' + libro.id + '.\nTítulo: ' + libro.titulo + '.\nAutor@: ' + libro.autor + '.\nAño: ' + libro.anio + '.');
+
+                            let respuesta = normalizarDatosUsuario(prompt('¿Es correcto? Si/No: '));
+                            confirmacion = (respuesta === 'si') ? true : false; 
+
+                            if (!confirmacion) {
+                                idBorrar = parseInt(prompt('Intentá nuevamente. Ingrese otro id de libro: '));
+                            }
+
+                        } else {
+                            console.log('No se encontró un libro con ese id.');
+                            idBorrar = parseInt(prompt('Intentá nuevamente. Ingrese otro id de libro: '));
+                        }
+
+                    } while (confirmacion === false); 
+                    
+                    let indiceFinal = libros.findIndex(libro => libro.id === idBorrar); 
+                    if (indiceFinal !== -1) {
+                        libros.splice(indiceFinal, 1);
+                        console.log('El libro ha sido borrado correctamente.');
+                    }
+                };
                 borrarLibro(idBorrar);
                 break;
 
