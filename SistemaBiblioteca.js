@@ -422,6 +422,17 @@ function menuUsuarioAdministrador() {
                     }
                 } while (usuarioEncontrado === false);
 
+                function borrarUsuario(idBorrarUsuario) {
+                    for (let fila =0; fila < usuarios.length; fila++) {//Recorro el array usuarios
+                            if ( usuarios[fila].id === idBorrarUsuario) {//Comparo el valor dado con los datos del array
+                                usuarios.splice (fila, 1);//borro el parametro dado
+                                    console.log ('El usuario ha sido borrado.');//Confirmo la operación
+                                    return;
+                                }
+                        }
+                };
+
+
                 borrarUsuario(idBorrarUsuario) 
                 break;
                 
@@ -433,7 +444,88 @@ function menuUsuarioAdministrador() {
     } while (opcionUsuarioAdministrador !== 0);
 }
 
+//Menú Usuarios
+function menuUsuario() {
+    let opcionUsuario = 0;
+    do {
+       console.log('\nMENÚ USUARIOS\n1. Registrar usuario\n2. Buscar por email\n3. Solo administrador\n0. Volver');
+        opcionUsuario = parseInt(prompt('Ingrese el número de la opción escogida: '));
 
+        switch (opcionUsuario) {
+    
+    //Función para registrarse como usuario.
+            case 1:
+                let nuevoUsuario = [];
+                let confirmacion = false;
+                
+                do {
+                    nuevoUsuario = {
+                        id: '10' + (usuarios.length + 1),
+                        nombre: normalizarDatosUsuario(prompt('Ingrese su nombre y apellido: ')),
+                        email: normalizarDatosUsuario(prompt('Ingrese su email: '))
+                    };
+
+                    console.log('Usuario: ' + nuevoUsuario.nombre + '.\nEmail: ' + nuevoUsuario.email + '.');
+
+                    let respuesta = normalizarDatosUsuario(prompt('¿Es correcto? Si/No: '));
+                    confirmacion = (respuesta === 'si') ? true : false;
+
+                } while (confirmacion === false);   
+                
+                function registrarUsuario(nuevoUsuario) {
+                    usuarios.push(nuevoUsuario);
+                    console.log ('Id. ' + nuevoUsuario.id + '.\nUsuario: ' + nuevoUsuario.nombre + '.\nEmail: ' + nuevoUsuario.email + '.');
+                    console.log('Se ha registrado exitosamente.');
+                };
+
+
+                registrarUsuario(nuevoUsuario);
+
+                break;
+
+    //Función para buscar usuario por email.
+            case 2:
+                let criterioBuscarUsuario = ''; 
+                let confirmacionBuscarUsuario = false;
+                let idUsuario = '';
+
+                do {
+                    criterioBuscarUsuario = prompt('Ingrese el email del usuario que desea buscar: ');
+                    console.log('El email ingresado es: ' + criterioBuscarUsuario);
+
+                    let respuesta = normalizarDatosUsuario(prompt('¿Es correcto? Si/No: '));
+                    confirmacionBuscarUsuario = (respuesta === 'si') ? true : false;
+
+                } while (confirmacionBuscarUsuario === false);
+                console.log('Usuario no encontrado.');
+
+                function buscarUsuario(criterioBuscarUsuario) {
+                    for (let i = 0; i < usuarios.length; i++) {
+                        if (usuarios[i].email === criterioBuscarUsuario) {
+                            idUsuario = usuarios[i].id;
+                            console.log('Id.: ' + usuarios[i].id + '\nAutor: ' + usuarios[i].nombre + '\nAño: ' + usuarios[i].email);
+                            mostrarLibrosDeUsuario(idUsuario);
+                            return; 
+                        }
+                    }    
+                };
+
+                buscarUsuario(criterioBuscarUsuario);
+                break;
+            
+            case 3:
+                let esAdmin = prompt('¿Es administrador? si/no: ').toLowerCase();
+                esAdmin === 'si' ? menuUsuarioAdministrador() : console.log('Acceso denegado.');
+                break;
+            
+            case 0:
+                break;
+            
+            default:
+                console.log('Ingrese una opción válida.');
+        }
+    } while (opcionUsuario !== 0);
+}
 
 
 //Menú Principal
