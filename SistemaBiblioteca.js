@@ -248,7 +248,6 @@ function menuLibroAdministrador() {
 }
 
 //Menú Libro
-//Menú Libro
 function menuLibro() {
     let opcionLibro = '';
     do {
@@ -376,6 +375,62 @@ function menuLibro() {
                 console.log('Ingrese una opción válida.');
         }
     } while (opcionLibro !== 'x');
+}
+
+//Menú Usuarios: Opciones Administrador
+function menuUsuarioAdministrador() {
+    let opcionUsuarioAdministrador = 0;
+    do {
+        console.log('\nMENÚ USUARIO ADMINISTRADOR\n1. Ver todos los usuarios\n2. Borrar usuario\n0. Volver');
+        opcionUsuarioAdministrador = parseInt(prompt('Ingrese el número de la opción escogida: '));
+
+        switch (opcionUsuarioAdministrador) {
+    
+    //Función para ver todos los usuarios.
+            case 1:
+                function mostrarTodosLosUsuarios () {
+                    for (let i=0; i < usuarios.length; i++){//Recorro todo el array por sus filas.
+                        idUsuario = usuarios[i].id;//Indico cual es el idUsuario para poder ver los librosPrestados
+                        console.log('\nId.'+ usuarios[i].id + '.\nUsuario: ' + usuarios[i].nombre + '.\nEmail: ' + usuarios[i].email + '\nLibros Prestados: '); //Imprimo toda la información del array.
+                        mostrarLibrosDeUsuario(idUsuario);
+                        };
+                };
+                mostrarTodosLosUsuarios();
+                break;
+
+    //Función para borrar un usuario.
+            case 2:
+                let confirmacionBorrarUsuario = false;
+                let idBorrarUsuario = 0;
+                let usuarioEncontrado = false;
+                do {
+                    usuarioEncontrado = false;  
+                    idBorrarUsuario = parseInt(prompt ('¿Qué usuario desea borrar? Ingrese el id.: '));
+                    for (let i=0; i < usuarios.length; i++){
+                        if (usuarios[i].id === idBorrarUsuario) {
+                            idUsuario = usuarios[i].id;
+                            usuarioEncontrado = true;
+                            console.log('Id: ' + usuarios[i].id + '.\Usuario: '+ usuarios[i].nombre + '.\nEmail: ' + usuarios[i].email); 
+                            mostrarLibrosDeUsuario(idUsuario);
+                        }
+                    }
+                    confirmacionBorrarUsuario = normalizarDatosUsuario(prompt('¿Es correcto? Si/No: '));
+                    confirmacionBorrarUsuario = (respuesta === 'si') ? true : false;
+                
+                    if(!usuarioEncontrado) {
+                        console.log('Usuario no encontrado. Ingresa un id. válido.')
+                    }
+                } while (usuarioEncontrado === false);
+
+                borrarUsuario(idBorrarUsuario) 
+                break;
+                
+            case 0:
+                break;
+            default:
+                console.log('Ingrese una opción válida.');
+        }
+    } while (opcionUsuarioAdministrador !== 0);
 }
 
 
