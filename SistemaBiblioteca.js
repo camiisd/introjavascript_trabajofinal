@@ -123,7 +123,7 @@ function menuLibroAvanzado() {
                 librosConPalabrasEnTitulo(libros);
                 break;
 
-    //Función para calcular estadisticas respecto a los libros almacenados con el objeto Math.         
+    //Función para calcular estadísticas respecto a los libros almacenados con el objeto Math.         
                 case 2:
                 function calcularEstadisticas () {
                     let aniosPublicacion = libros.map(libro => libro.anio);
@@ -178,6 +178,43 @@ function menuLibroAvanzado() {
     } while (opcionLibroAvanzado !== 0);
 };
 
+function menuLibroAdministrador() {
+    let opcionLibroAdministrador = 0;
+    do {
+        console.log('\nMENÚ LIBRO ADMINISTRADOR\n1. Agregar libro\n2. Borrar libro\n0. Volver');
+        
+        opcionLibroAdministrador = parseInt(prompt('Ingrese el número de la opción escogida: '));
+
+        switch (opcionLibroAdministrador) {
+    //Función para el administrador: Agregar un libro nuevo.
+            case 1:
+                let nuevoLibro = [];
+                function agregarLibro (nuevoLibro){
+                    let nuevoLibro = { //Primero creo un objeto con todas las propiedades para que sea más fácil guardar la información en el array 'libros'
+                            id: libros.length + 1, //el id lo asigna directamente el sistema para seguir la numeración del array.
+                            titulo: normalizarDatosUsuario(prompt ('Ingrese el título: '), true), //La última función me permite que todo se quede en minúsculas.
+                            autor: normalizarDatosUsuario(prompt ('Ingrese el autor: '), false),
+                            anio: parseInt(prompt('Ingrese el año: ')), //Me aseguro que el año sea un número entero.
+                            genero: normalizarDatosUsuario(prompt('Ingrese el género: '), false)
+                        };
+                    libros.push (nuevoLibro);
+                };
+                agregarLibro(nuevoLibro);
+                break;
+                
+            case 2:
+                let idBorrar = parseInt(prompt ('¿Qué título desea borrar? Ingrese el id.: ')); //El usuario ingresa el número del id. Me aseguro que sea un número entero.
+                borrarLibro(idBorrar);
+                break;
+
+            case 0:
+                break;
+
+            default:
+                console.log('Ingrese una opción válida.');
+        }
+    } while (opcionLibroAdministrador !== 0);
+}
 
 
 
