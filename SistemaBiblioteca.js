@@ -189,9 +189,9 @@ function menuLibroAdministrador() {
         switch (opcionLibroAdministrador) {
     //Función para el administrador: Agregar un libro nuevo.
             case 1:
-                let nuevoLibro = [];
+                nuevoLibro = [];
                 function agregarLibro (nuevoLibro){
-                    let nuevoLibro = {
+                    nuevoLibro = {
                             id: libros.length + 1, 
                             titulo: normalizarDatosUsuario(prompt ('Ingrese el título: '), true), 
                             autor: normalizarDatosUsuario(prompt ('Ingrese el autor: '), false),
@@ -201,6 +201,13 @@ function menuLibroAdministrador() {
                     libros.push (nuevoLibro);
                 };
                 agregarLibro(nuevoLibro);
+                console.log('El libro ha sido agregado')
+                function verTodosLosLibros () {
+                    for (let i = 0; i < libros.length; i++) {
+                    console.log('\nId. ' + libros[i].id +'\nTítulo: ' + libros[i].titulo + '\nAutor: ' + libros[i].autor + '\nAño: ' + libros[i].anio + '\nGénero: ' + libros[i].genero + (libros[i].disponibilidad ? '\nDisponible.' : '\nNo disponible.')); //Me permite ver todos los libros del array.
+                } 
+                };
+                verTodosLosLibros ()
                 break;
     
     //Función para el administrador: Borrar un libro.            
@@ -236,6 +243,7 @@ function menuLibroAdministrador() {
                     }
                 };
                 borrarLibro(idBorrar);
+                verTodosLosLibros ();
                 break;
 
             case 0:
@@ -258,9 +266,7 @@ function menuLibro() {
     
     //Función para ver todos los libros.
             case 'a':
-                for (let i = 0; i < libros.length; i++) {
-                    console.log('\nId. ' + libros[i].id +'\nTítulo: ' + libros[i].titulo + '\nAutor: ' + libros[i].autor + '\nAño: ' + libros[i].anio + '\nGénero: ' + libros[i].genero + (libros[i].disponibilidad ? '\nDisponible.' : '\nNo disponible.')); //Me permite ver todos los libros del array.
-                }    
+                verTodosLosLibros ()    
                 break;
 
     // Función para ordenar los Libros según año o título.       
@@ -269,6 +275,8 @@ function menuLibro() {
                 function ordenarLibros(criterioOrdenar) {
                     switch (criterioOrdenar) {
                         case 'año':
+                        case 'ano':
+                        case 'anio':
                             for (let fila =0; fila < libros.length-1; fila++) {
                                 for (let columna = 0; columna < libros.length - 1- fila; columna++) {
                                     if (libros[columna].anio > libros[columna+1].anio ) {
@@ -415,7 +423,8 @@ function menuUsuarioAdministrador() {
                         }
                     }
                     confirmacionBorrarUsuario = normalizarDatosUsuario(prompt('¿Es correcto? Si/No: '));
-                    confirmacionBorrarUsuario = (respuesta === 'si') ? true : false;
+                    confirmacionBorrarUsuario = (confirmacionBorrarUsuario === 'si');
+
                 
                     if(!usuarioEncontrado) {
                         console.log('Usuario no encontrado. Ingresa un id. válido.')
@@ -490,7 +499,7 @@ function menuUsuario() {
                 let idUsuario = '';
 
                 do {
-                    criterioBuscarUsuario = prompt('Ingrese el email del usuario que desea buscar: ');
+                    criterioBuscarUsuario = normalizarDatosUsuario(prompt('Ingrese el email del usuario que desea buscar: '));
                     console.log('El email ingresado es: ' + criterioBuscarUsuario);
 
                     let respuesta = normalizarDatosUsuario(prompt('¿Es correcto? Si/No: '));
@@ -507,7 +516,12 @@ function menuUsuario() {
                             mostrarLibrosDeUsuario(idUsuario);
                             return; 
                         }
-                    }    
+                    }   
+                    
+                    if (!criterioBuscarUsuario) {
+                        console.log('Usuario no encontrado.');
+                    }
+                
                 };
 
                 buscarUsuario(criterioBuscarUsuario);
@@ -601,7 +615,7 @@ function menuPrestamos() {
                 function devolverLibro(idLibro, idUsuario) {
                     let usuarioEncontrado = false;
                     while (!usuarioEncontrado) {
-                        for (let i = 0; i < usuarios.length; j++) {
+                        for (let i = 0; i < usuarios.length; i++) {
                             
                             if (idUsuario === usuarios[i].id) {
                                 console.log('Id.: ' + usuarios[i].id + '.\nUsuari@: ' + usuarios[i].nombre + '.\nEmail: ' + usuarios[i].email);
@@ -619,7 +633,7 @@ function menuPrestamos() {
                                             let confirmar = normalizarDatosUsuario(prompt('¿Confirma la devolución del libro? Si/No: '));
                                             
                                             if (confirmar === 'si') { 
-                                                let nuevoLibrosPrestados = usuarios[i].librosPrestados.slice(libros[i].id);
+                                                usuarios[i].librosPrestados = usuarios[i].librosPrestados.filter(id => id !== libro.id);
                                                 libros[i].disponibilidad = true;
                                                 console.log('La devolución se realizó existosamente.');
                                                 mostrarLibrosDeUsuario(idUsuario)
@@ -703,7 +717,7 @@ function menuPrestamos() {
                         }
                     }, libros[0].anio);
 
-                    console.log('El libro más nuevo es del año: ' + libroMasNuevo); //Muestro el resultado por consola
+                    console.log('El libro más nuevo es del año: ' + libroMasNuevo); 
                 };
 
                 generarReporteLibros ();
