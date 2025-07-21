@@ -69,9 +69,43 @@ function normalizarDatos () {
         }
 };
 
-normalizarDatos()
-
 function normalizarDatosUsuario(texto, enMayusculas = false) {
     texto = texto.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     return enMayusculas ? texto.toUpperCase() : texto.toLowerCase();
     }; 
+
+normalizarDatos()
+
+//Se ordena el sistema de bibliotecas a partir de un menú principal y varios submenús.
+
+
+
+
+//Menú Principal.
+function menuPrincipal() {
+    let opcionPrincipal = 0;
+    do { 
+        console.log('\nMENÚ PRINCIPAL' + '\n1. Libros' + '\n2. Usuarios' + '\n3. Préstamos' + '\n0. Salir'); 
+        opcionPrincipal = parseInt(prompt('Ingrese el número de la opción escogida: ')); 
+        switch (opcionPrincipal) {
+                case 1:
+                menuLibro();
+                break;
+            case 2:
+                menuUsuario();
+                break;
+            case 3:
+                menuPrestamos();
+                break;
+            case 0:
+                console.log('Saliendo del sistema...');
+                break;
+            default:
+                console.log('Ingrese una opción válida.');
+        }
+    } while (opcionPrincipal !== 0);
+};
+
+
+//Incialización del Menú Principal
+menuPrincipal();
