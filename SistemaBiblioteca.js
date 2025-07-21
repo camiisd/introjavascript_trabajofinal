@@ -54,3 +54,24 @@ function mostrarLibrosDeUsuario(idUsuario) {
     }
 };
 let idUsuario = '';
+
+//Función para normalizar los datos que se ingresan en usuarios y libros
+function normalizarDatos () {
+    for (let i = 0; i < libros.length; i++) {
+        libros[i].titulo = libros[i].titulo.trim().toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); 
+        libros[i].autor = libros[i].autor.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+        libros[i].genero = libros[i].genero.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    };
+    
+     for (let i = 0; i < usuarios.length; i++) {
+        usuarios[i].email = usuarios[i].email.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase(); 
+        usuarios[i].nombre = usuarios[i].nombre.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+        }
+};
+
+normalizarDatos()
+
+function normalizarDatosUsuario(texto, enMayusculas = false) {
+    texto = texto.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    return enMayusculas ? texto.toUpperCase() : texto.toLowerCase();
+    }; 
