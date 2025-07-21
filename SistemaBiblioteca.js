@@ -256,11 +256,14 @@ function menuLibro() {
         opcionLibro = normalizarDatosUsuario(prompt('Ingrese la letra de la opción escogida: '));
 
         switch (opcionLibro) {
+    
+    //Función para ver todos los libros.
             case 'a':
                 for (let i = 0; i < libros.length; i++) {
                     console.log('\nId. ' + libros[i].id +'\nTítulo: ' + libros[i].titulo + '\nAutor: ' + libros[i].autor + '\nAño: ' + libros[i].anio + '\nGénero: ' + libros[i].genero + (libros[i].disponibilidad ? '\nDisponible.' : '\nNo disponible.')); //Me permite ver todos los libros del array.
                 }    
                 break;
+
     // Función para ordenar los Libros según año o título.       
             case 'b': 
                 let criterioOrdenar = normalizarDatosUsuario(prompt ('¿Cómo desea ordenar los libros? Título/Año: '));
